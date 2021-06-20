@@ -3,7 +3,7 @@
 set FSO=CreateObject ("Scripting.FileSystemObject")
 wallherefile = fso.GetSpecialFolder(2): if right(wallherefile,1)<>"\" then wallherefile=wallherefile & "\" : wallherefile = wallherefile & "wallhere.jpg"
 
-searchstring="natural"
+searchstring=""
 
 '=== part 1 ====
 sUrlRequest = "https://wallhere.com/en/random?q=" & searchstring & "&direction=horizontal"
@@ -48,7 +48,7 @@ Set objWshShell = WScript.CreateObject("Wscript.Shell")
 'objWshShell.Run "%windir%\System32\RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters", 1, False
 
 'use irfanview if you want
-objWshShell.Run "c:\Programs\IrfanView\i_view64.exe """ & wallherefile & """ /wall=0 /killmesoftly", 1, False 
+objWshShell.Run "c:\Programs\IrfanView\i_view64.exe """ & wallherefile & """ /wall=3 /killmesoftly", 3, False 
 
 
 Set oXMLHTTP2 = Nothing
