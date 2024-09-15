@@ -7,7 +7,7 @@ searchstring=""
 
 '=== part 1 ====
 sUrlRequest = "https://wallhere.com/en/random?q=" & searchstring & "&direction=horizontal"
-Set oXMLHTTP = CreateObject("MSXML2.XMLHTTP")
+Set oXMLHTTP = CreateObject("WinHttp.WinHttpRequest.5.1")
 oXMLHTTP.Open "GET", sUrlRequest, False
 oXMLHTTP.Send
 httpfile=oXMLHTTP.Responsetext
@@ -21,7 +21,7 @@ url="https://wallhere.com" & lnk
 
 '=== part 2 ====
 sUrlRequest = url
-Set oXMLHTTP = CreateObject("MSXML2.XMLHTTP")
+Set oXMLHTTP = CreateObject("WinHttp.WinHttpRequest.5.1")
 oXMLHTTP.Open "GET", sUrlRequest, False
 oXMLHTTP.Send
 httpfile=oXMLHTTP.Responsetext
@@ -46,9 +46,14 @@ Set objWshShell = WScript.CreateObject("Wscript.Shell")
 'use OS to set wallpaper
 'objWshShell.RegWrite "HKEY_CURRENT_USER\Control Panel\Desktop\Wallpaper", wallherefile, "REG_SZ"
 'objWshShell.Run "%windir%\System32\RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters", 1, False
+Set objFile = FSO.GetFile(wallherefile)
+Set objShellApp = CreateObject("Shell.Application")
+Set objFolder = objShellApp.Namespace(FSO.GetParentFolderName(objFile))
+objFolder.ParseName(FSO.GetFileName(objFile)).InvokeVerb "setdesktopwallpaper"
+
 
 'use irfanview if you want
-objWshShell.Run "c:\Programs\IrfanView\i_view64.exe """ & wallherefile & """ /wall=3 /killmesoftly", 3, False 
+'objWshShell.Run "c:\Programs\IrfanView\i_view64.exe """ & wallherefile & """ /wall=3 /killmesoftly", 2, False 
 
 
 Set oXMLHTTP2 = Nothing
