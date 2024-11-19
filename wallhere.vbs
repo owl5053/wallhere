@@ -1,4 +1,16 @@
-'On error resume next 'comment it for debug
+On error resume next 'comment it for debug
+
+Sub SetWallpaper(FileName)    
+    On Error Resume Next
+    Set oShA = oShA.Windows.Item.document.Application
+    If Not IsObject(oSHA) Then _
+    Set oShA = GetObject("new:{C08AFD90-F2A1-11D1-8455-00A0C91F3880}").document.Application
+    On Error GoTo 0: Er = Not IsObject(oSHA)
+    If Er Then Set oShA = CreateObject("Shell.Application")
+    oShA.NameSpace(0).ParseName(FileName).InvokeVerb "setdesktopwallpaper"
+    If Er Then WSH.Sleep 4000
+    Set oFSO = Nothing: Set oShA = Nothing
+End Sub
 
 set FSO=CreateObject ("Scripting.FileSystemObject")
 wallherefile = fso.GetSpecialFolder(2): if right(wallherefile,1)<>"\" then wallherefile=wallherefile & "\" : wallherefile = wallherefile & "wallhere.jpg"
@@ -15,7 +27,7 @@ Set oXMLHTTP = Nothing
 
 beg=instr(lcase(httpfile),"/en/wallpaper/")
 ef=instr(lcase(httpfile),"current-item-photo")
-lnk=mid(httpfile,beg,ef-beg-9)
+lnk=mid(httpfile,beg,ef-beg-10)
 url="https://wallhere.com" & lnk
 
 
@@ -43,18 +55,11 @@ oADOStream.Write oXMLHTTP2.ResponseBody
 oADOStream.SaveToFile wallherefile, 2
 
 Set objWshShell = WScript.CreateObject("Wscript.Shell")
-'use OS to set wallpaper
-'objWshShell.RegWrite "HKEY_CURRENT_USER\Control Panel\Desktop\Wallpaper", wallherefile, "REG_SZ"
-'objWshShell.Run "%windir%\System32\RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters", 1, False
-Set objFile = FSO.GetFile(wallherefile)
-Set objShellApp = CreateObject("Shell.Application")
-Set objFolder = objShellApp.Namespace(FSO.GetParentFolderName(objFile))
-objFolder.ParseName(FSO.GetFileName(objFile)).InvokeVerb "setdesktopwallpaper"
 
+SetWallpaper wallherefile
 
 'use irfanview if you want
 'objWshShell.Run "c:\Programs\IrfanView\i_view64.exe """ & wallherefile & """ /wall=3 /killmesoftly", 2, False 
-
 
 Set oXMLHTTP2 = Nothing
 Set oADOStream = Nothing
