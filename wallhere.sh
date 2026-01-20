@@ -1,6 +1,7 @@
 #!/bin/bash 
 
-random_link=$(curl -s -L "https://wallhere.com/en/random?q=&direction=horizontal" | grep -o '<a href="/en/wallpaper/[^"]*' | cut -d'"' -f2 | shuf -n1)
+query="" # you can set any query, for example: nature,girl. Default: empty
+random_link=$(curl -s -L "https://wallhere.com/en/random?q=${query}&direction=horizontal" | grep -o '<a href="/en/wallpaper/[^"]*' | cut -d'"' -f2 | shuf -n1)
 url=$(curl -s -L "https://wallhere.com/${random_link}" | grep 'current-page-photo' | grep -o 'href="[^"]*"' | cut -d'"' -f2)
 
 
